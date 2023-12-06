@@ -44,11 +44,9 @@ def get_stats(ts, std=4):
     return {"num_peaks": len(peaks), "peak_date": ts[ts['value']==peak]['date'].values[0], "non_zero_date": ts.iloc[non_zero_index]['date'], "dist_to_peak": dist_to_peak}
 
 
-data = pd.read_csv('1970-2021_DISASTERS.xlsx - emdat data.csv')
-data = data[data.Year==2021]
-named = data[~data['Event Name'].isna()]
-
-# get_timeline("storm", "20210101000000", "20220131000000")
+# data = pd.read_csv('1970-2021_DISASTERS.xlsx - emdat data.csv')
+# data = data[data.Year==2021]
+# named = data[~data['Event Name'].isna()]
 
 short_query = """{} AND ("shortage" OR "demand spike")"""
 disasters = [{'name': '"Filomena"', 'start': 2021, 'end': 2022}, {'name': '"Hurricane Elsa"', 'start': 2021, 'end': 2022}, {'name': '"cylone Niran"', 'start': 2021, 'end': 2022}, {'name': '"cyclone Seroja 21"', 'start': 2021, 'end': 2022}, {'name': '"Cyclone Yaas"', 'start': 2021, 'end': 2022}, {'name': '"storm Ida"', 'start': 2021, 'end': 2022}, {'name': '"Mount Sangay"', 'start': 2021, 'end': 2022}, {'name': '"cyclone Ana"', 'start': 2021, 'end': 2022}, {'name': '"storm Enrique"', 'start': 2021, 'end': 2022}, {'name': '"cyclone Grace"', 'start': 2021, 'end': 2022}, {'name': '"cylone Nora"', 'start': 2021, 'end': 2022}, {'name': '"Cyclone Shaheen"', 'start': 2021, 'end': 2022}, {'name': '"storm Choi Wan"', 'start': 2021, 'end': 2022}, {'name': '"cyclone Conson (Jolina)"', 'start': 2021, 'end': 2022}, {'name': '"storm Dolores"', 'start': 2021, 'end': 2022}, {'name': '"Mount Nyiragongo"', 'start': 2021, 'end': 2022}, {'name': '"storm Koguma"', 'start': 2021, 'end': 2022}, {'name': '"cyclone Eloise"', 'start': 2021, 'end': 2022}, {'name': '"storm Jobo"', 'start': 2021, 'end': 2022}, {'name': '"cyclone Surigae"', 'start': 2021, 'end': 2022}, {'name': '"Marburg fever"', 'start': 2021, 'end': 2022}, {'name': '"Mount Pacaya"', 'start': 2021, 'end': 2022}, {'name': '"Mount Merapi"', 'start': 2021, 'end': 2022}, {'name': '"cyclone Tauktae"', 'start': 2021, 'end': 2022}, {'name': '"Cyclone Gulab"', 'start': 2021, 'end': 2022}, {'name': '"Dengue" AND "outbreak"', 'start': 2021, 'end': 2022}, {'name': '"Cholera" AND "outbreak"', 'start': 2021, 'end': 2022}, {'name': '"storm Dujuan (Auring)"', 'start': 2021, 'end': 2022}, {'name': '"Taal volcano"', 'start': 2021, 'end': 2022}, {'name': '"Cumbre Vieja volcano"', 'start': 2021, 'end': 2022}, {'name': '"Storm Claudette"', 'start': 2021, 'end': 2022}, {'name': '"depression Henri"', 'start': 2021, 'end': 2022}, {'name': '"Dixie fire"', 'start': 2021, 'end': 2022}, {'name': '"Caldor fire"', 'start': 2021, 'end': 2022}, {'name': '"Telegraph and Mescal Fires"', 'start': 2021, 'end': 2022}, {'name': '"Bootleg Fire "', 'start': 2021, 'end': 2022}, {'name': '"La Souffrière"', 'start': 2021, 'end': 2022}, {'name': '"Ituango Dam" AND "collapse"', 'start': 2018, 'end': 2019}, {"name": '"ethiopian" AND "boeing MAX" AND "crash"', 'start': 2019, 'end': 2020}, {"name": '"Morandi Bridge" AND "collapse"', 'start': 2018, 'end': 2019}, {"name": '"oil refinery" AND "explosion" AND "husky energy"', 'start': 2018, 'end': 2019}, {"name": '"oil refinery" AND "fire" AND "sonara"', 'start': 2018, 'end': 2019}, {"name": '"lion air" AND "boeing MAX" AND "crash"', 'start': 2018, 'end': 2019}, {"name": '"Brumadinho dam" AND "collapse"', 'start': 2019, 'end': 2020}]
@@ -80,10 +78,10 @@ for entry in tqdm(disasters):
         data.append({
             "name": name,
             "year": s_year,
-            "num_peaks": short_stats['num_peaks'],
-            "peak_date": short_stats['peak_date'],
-            "first_mention": short_stats['non_zero_date'],
-            "dist_to_peak": short_stats['dist_to_peak'],
+            "num_peaks": base_stats['num_peaks'],
+            "peak_date": base_stats['peak_date'],
+            "first_mention": base_stats['non_zero_date'],
+            "dist_to_peak": base_stats['dist_to_peak'],
             "total_articles": base['value'].sum(),
             "total_shortage_articles": final['value'].sum(),
         })
@@ -106,7 +104,7 @@ for entry in tqdm(disasters):
         ax1.legend(loc='upper left')
         ax2.legend(loc='upper right')
         plt.title(name)
-        plt.savefig(f'2021_plots/{name}.png', dpi=300)
+        plt.savefig(f'plots/{name}.png', dpi=300)
         plt.close(fig)
         time.sleep(5)
     except Exception as e:
